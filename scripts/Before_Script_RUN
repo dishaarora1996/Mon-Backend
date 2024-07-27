@@ -6,6 +6,8 @@
 
 - pip install gunicorn
 
-# Add in requirements.txt
+# Add the above 2 packages in requirements.txt
+
+- pip freeze > requirements.txt
 
 # Manually create a .env file in server

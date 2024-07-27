@@ -1,0 +1,11 @@
+# Manually install whitenoise
+
+- pip install whitenoise
+
+# Manually install gunicorn
+
+- pip install gunicorn
+
+# Add in requirements.txt
+
+# Manually create a .env file in server

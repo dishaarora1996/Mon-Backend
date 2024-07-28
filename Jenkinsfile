@@ -11,10 +11,13 @@ node {
             slackSend color: "warning", message: "Started `${env.JOB_NAME}#${env.BUILD_NUMBER}`\n\n_The changes:_\n${lastChanges}"
 
         stage 'Test'
-            sh 'virtualenv env -p python3.10'
-            sh '. env/bin/activate'
-            sh 'env/bin/pip install -r requirements.txt'
-            sh 'env/bin/python3.10 manage.py test --testrunner=blog.tests.test_runners.NoDbTestRunner'
+            withCredentials([file(credentialsId: 'env-file-id', variable: 'ENV_FILE')]) {
+                sh 'python3 -m venv env'
+                sh 'source env/bin/activate'
+                sh 'pip install -r requirements.txt'
+                sh 'cp $ENV_FILE env/.env'  // Copy the secret .env file to virtual environment directory
+                sh 'set -o allexport; source env/.env; set +o allexport' // Load environment variables
+                sh 'python manage.py test --testrunner=blog.tests.test_runners.NoDbTestRunner'
 
         stage 'Deploy'
             sh './deployment/deploy_prod.sh'

@@ -189,30 +189,30 @@ MESSAGE_TAGS = {
  }
 
 # Set up logging directory
-LOGS_DIR = BASE_DIR / 'logs'
-LOGS_DIR.mkdir(exist_ok=True)
+# LOGS_DIR = BASE_DIR / 'logs'
+# LOGS_DIR.mkdir(exist_ok=True)
 
-if bool(int(str(os.getenv('LOGGING_ENABLED')))):
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'file': {
-                'level': 'DEBUG',
-                'class': 'logging.FileHandler',
-                'filename': LOGS_DIR / 'debug.log',
-            },
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['file'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
-        },
-    }
-else:
-    pass
+# if bool(int(str(os.getenv('LOGGING_ENABLED')))):
+#     LOGGING = {
+#         'version': 1,
+#         'disable_existing_loggers': False,
+#         'handlers': {
+#             'file': {
+#                 'level': 'DEBUG',
+#                 'class': 'logging.FileHandler',
+#                 'filename': LOGS_DIR / 'debug.log',
+#             },
+#         },
+#         'loggers': {
+#             'django': {
+#                 'handlers': ['file'],
+#                 'level': 'DEBUG',
+#                 'propagate': True,
+#             },
+#         },
+#     }
+# else:
+#     pass
 
 
 # AUTH_USER_MODEL= 'auth.User'  #django.contrib.auth.model

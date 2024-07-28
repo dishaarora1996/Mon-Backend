@@ -17,7 +17,7 @@ node {
                 sh '. env/bin/activate'
                 sh 'env/bin/pip install -r requirements.txt'
                 sh 'cp $ENV_FILE env/.env'  // Copy the secret .env file to virtual environment directory
-                sh 'set -o allexport; source env/.env; set +o allexport' // Load environment variables
+                sh '. env/.env' // Load environment variables using .
                 sh 'env/bin/python3.10 manage.py test --testrunner=blog.tests.test_runners.NoDbTestRunner'
             }
         }

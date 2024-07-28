@@ -13,6 +13,7 @@ node {
         stage ('Test') {
             withCredentials([file(credentialsId: 'env-file-id', variable: 'ENV_FILE')]) {
                 sh 'virtualenv env -p python3.10'
+                sh 'chmod -R 777 env' // Ensure Jenkins has permission to write to the env directory
                 sh '. env/bin/activate'
                 sh 'env/bin/pip install -r requirements.txt'
                 sh 'cp $ENV_FILE env/.env'  // Copy the secret .env file to virtual environment directory

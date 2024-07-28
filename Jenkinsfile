@@ -28,6 +28,7 @@ node {
         }
 
         stage ('Deploy') {
+            sh 'chmod +x deployment/deploy_prod.sh' // Ensure the script is executable
             sh './deployment/deploy_prod.sh'
         }
 

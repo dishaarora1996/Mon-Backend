@@ -11,3 +11,44 @@
 - pip freeze > requirements.txt
 
 # Manually create a .env file in server
+
+The database has to be granted permission:
+
+Detailed Steps:
+
+1. Connect to Your PostgreSQL Database:
+   Use the psql command-line tool to connect to your PostgreSQL database with a user that has sufficient privileges to grant permissions. Typically, this would be the PostgreSQL superuser.
+
+- sh
+  Copy code
+- psql -U postgres -h localhost -d your_db_name
+  Replace postgres with your superuser, localhost with your database host, and your_db_name with the name of your database.
+
+2. Grant Permissions to the Database User:
+   Once connected to the PostgreSQL database, you can grant the necessary permissions to your database user. Here are the SQL commands you need to run:
+
+- sql
+  Copy code
+  -- Grant usage on the schema
+- GRANT USAGE ON SCHEMA public TO your_db_user;
+
+-- Grant all privileges on the auth_user table
+
+- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE auth_user TO your_db_user;
+
+-- If you want to grant all privileges on all tables in the schema
+
+- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_db_user;
+
+-- Grant privileges on sequences in the schema if needed
+
+- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_db_user;
+
+Grant permissions:
+
+- sql
+  Copy code
+- GRANT USAGE ON SCHEMA public TO your_db_user;
+- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE auth_user TO your_db_user;
+- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_db_user;
+- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_db_user;

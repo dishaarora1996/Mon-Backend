@@ -12,7 +12,7 @@ fi
 # Change ownership to ubuntu user
 sudo chown -R ubuntu:ubuntu "/home/ubuntu/project/$PROJECT_MAIN_DIR_NAME"
 
-# Change directory to the project main directory
+# Change directory to the project directory
 cd "/home/ubuntu/project"
 
 # Activate virtual environment

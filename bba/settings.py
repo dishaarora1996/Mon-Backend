@@ -108,25 +108,25 @@ WSGI_APPLICATION = 'bba.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-if bool(int(str(os.getenv('SQLITE')))):
-    PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(PROJECT_DIR, 'my.db'),
-        }
+# if bool(int(str(os.getenv('SQLITE')))):
+#     PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(PROJECT_DIR, 'my.db'),
+#         }
+#     }
+# else:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': str(os.getenv('PG_DATABASES_NAME')),
+        'USER': str(os.getenv('PG_DATABASES_USER')),
+        'PASSWORD': str(os.getenv('PG_DATABASES_PASSWORD')),
+        'HOST': str(os.getenv('PG_DATABASES_HOST')),
+        'PORT': str(os.getenv('PG_DATABASES_PORT')),
     }
-else:
-    DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': str(os.getenv('PG_DATABASES_NAME')),
-           'USER': str(os.getenv('PG_DATABASES_USER')),
-           'PASSWORD': str(os.getenv('PG_DATABASES_PASSWORD')),
-           'HOST': str(os.getenv('PG_DATABASES_HOST')),
-           'PORT': str(os.getenv('PG_DATABASES_PORT')),
-       }
-    }
+}
 
 
 

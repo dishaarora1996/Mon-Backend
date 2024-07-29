@@ -4,6 +4,11 @@ pipeline {
         DEPLOY_DIR = '/var/www/yourproject'
     }
     stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scm

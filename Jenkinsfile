@@ -32,7 +32,7 @@ node {
                 sshagent(['my-ssh-key']) { // Use the ID of your SSH credentials
                     // Run commands on the remote server
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@35.154.131.229 << EOF
+                        ssh -o StrictHostKeyChecking=no ubuntu@13.232.17.60 << EOF
                         echo "Connected to remote server"
                         # Navigate to the project directory
                         cd "/home/ubuntu/project/Mon-Backend"

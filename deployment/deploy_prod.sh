@@ -1,13 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
-ssh root@35.154.131.229 <<EOF
-  cd drfblogproject
-  git pull
-  source /opt/envs/drfblogproject/bin/activate
-  pip install -r requirements.txt
-  ./manage.py makemigrations
-  ./manage.py migrate  --run-syncdb
-  sudo service gunicorn restart
-  sudo service nginx restart
-  exit
-EOF
+# Navigate to the project directory
+cd /home/ubuntu/project/Mon-Backend
+
+# Pull latest changes
+git pull origin main
+
+# Activate virtual environment
+source ../venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Apply migrations and collect static files
+python manage.py migrate
+python manage.py collectstatic --noinput
+
+# Restart Gunicorn
+sudo systemctl restart gunicorn
+
+# Restart Nginx (optional if needed)
+# sudo systemctl restart nginx

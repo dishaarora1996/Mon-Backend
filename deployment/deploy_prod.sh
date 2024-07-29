@@ -13,6 +13,7 @@ source ../venv/bin/activate
 pip install -r requirements.txt
 
 # Apply migrations and collect static files
+python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput
 
@@ -20,4 +21,4 @@ python manage.py collectstatic --noinput
 sudo systemctl restart gunicorn
 
 # Restart Nginx (optional if needed)
-# sudo systemctl restart nginx
+sudo systemctl restart nginx

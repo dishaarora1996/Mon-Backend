@@ -42,6 +42,7 @@ pipeline {
                         echo "Connected to remote server"
                         # Navigate to the project directory
                         cd "/home/ubuntu/project/Mon-Backend"
+                        chmod +x deployment/deploy_prod.sh
                         # Run the deployment script
                         ./deployment/deploy_prod.sh
                         EOF

@@ -28,8 +28,20 @@ node {
         }
 
         stage ('Deploy') {
-            sh 'chmod +x deployment/deploy_prod.sh' // Ensure the script is executable
-            sh './deployment/deploy_prod.sh'
+            steps {
+                sshagent(['my-ssh-key']) { // Use the ID of your SSH credentials
+                    // Run commands on the remote server
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@35.154.131.229 << EOF
+                        echo "Connected to remote server"
+                        # Navigate to the project directory
+                        cd "/home/ubuntu/project/Mon-Backend"
+                        # Run the deployment script
+                        ./deployment/deploy_prod.sh
+                        EOF
+                    '''
+                }
+            }
         }
 
         stage ('Publish results') {

@@ -41,10 +41,10 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ubuntu@13.232.17.60 << EOF
                         echo "Connected to remote server"
                         # Navigate to the project directory
-                        cd "/home/ubuntu/project/Mon-Backend"
-                        chmod +x deployment/deploy_prod.sh
+                        cd /home/ubuntu/project/Mon-Backend
+                        chmod +x /home/ubuntu/project/Mon-Backend/deployment/deploy_prod.sh
+                        /home/ubuntu/project/Mon-Backend/deployment/deploy_prod.sh
                         # Run the deployment script
-                        ./deployment/deploy_prod.sh
                         EOF
                     '''
                 }

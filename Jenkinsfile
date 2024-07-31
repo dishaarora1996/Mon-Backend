@@ -66,3 +66,30 @@ pipeline {
         }
     }
 }
+
+
+
+
+stage ('Deploy') {
+            steps {
+                script {
+                    // Create and write the deployment script
+                    writeFile file: 'deploy.sh', text: '''#!/bin/bash
+                        echo "Connected to remote server"
+                        # Navigate to the project directory
+                        cd /home/ubuntu/project/Mon-Backend
+                        chmod +x /home/ubuntu/project/Mon-Backend/deployment/deploy_prod.sh
+                        # Run the deployment script
+                        /home/ubuntu/project/Mon-Backend/deployment/deploy_prod.sh
+                    '''
+                    // Make the deployment script executable
+                    sh 'chmod +x deploy.sh'
+                }
+                sshagent(['my-ssh-key']) { // Use the ID of your SSH credentials
+                    // Copy the deploy script to the remote server
+                    sh 'scp -o StrictHostKeyChecking=no deploy.sh ubuntu@13.232.17.60:/home/ubuntu/deploy.sh'
+                    // Run the deploy script on the remote server
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@13.232.17.60 /home/ubuntu/deploy.sh'
+                }
+            }
+        }

@@ -93,3 +93,17 @@ stage ('Deploy') {
                 }
             }
         }
+
+
+    stage ('Deploy') {
+        steps {
+            sshagent(['my-ssh-key']) { // Use the ID of your SSH credentials
+                // Ensure the deploy script is executable locally (in case it isn't)
+                sh 'chmod +x deployment/deploy.sh'
+                // Copy the deploy script to the remote server
+                sh 'scp -o StrictHostKeyChecking=no deployment/deploy.sh ubuntu@13.232.17.60:/home/ubuntu/deploy.sh'
+                // Run the deploy script on the remote server
+                sh 'ssh -o StrictHostKeyChecking=no ubuntu@13.232.17.60 /home/ubuntu/deploy.sh'
+            }
+        }
+    }

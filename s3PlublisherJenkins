@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+    environment {
+        DEPLOY_DIR = '/var/www/yourproject'
+        S3_BUCKET = 'your-s3-bucket-name'
+        S3_PATH = 'backups/'
+    }
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                    def backupFileName = "backup_${timestamp}.zip"
+                    sh "zip -r ${backupFileName} ${DEPLOY_DIR}"
+
+                    // Archive the backup file as a Jenkins artifact
+                    archiveArtifacts artifacts: backupFileName, allowEmptyArchive: true
+                }
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                // Upload the backup file to S3 using the S3 Publisher plugin
+                step([
+                    $class: 'S3BucketPublisher',
+                    entries: [[
+                        bucket: "${S3_BUCKET}",
+                        sourceFile: "${backupFileName}",
+                        selectedRegion: 'us-east-1',
+                        noUploadOnFailure: true,
+                        managedArtifacts: true,
+                        path: "${S3_PATH}${backupFileName}"
+                    ]],
+                    profileName: 'aws-credentials'
+                ])
+                
+                slackSend color: "good", message: "Build successful: `${env.JOB_NAME}#${env.BUILD_NUMBER}` <${env.BUILD_URL}|Open in Jenkins>\nBackup created and stored in S3: ${backupFileName}"
+            }
+        }
+        failure {
+            slackSend color: "danger", message: "Build failed :face_with_head_bandage: \n`${env.JOB_NAME}#${env.BUILD_NUMBER}` <${env.BUILD_URL}|Open in Jenkins>"
+        }
+    }
+}

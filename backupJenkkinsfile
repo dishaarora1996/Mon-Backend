@@ -1,0 +1,105 @@
+post {
+        success {
+            script {
+                // Create a backup of the project directory
+                def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                def backupFileName = "backup_${timestamp}.zip"
+                sh "zip -r ${backupFileName} ${DEPLOY_DIR}"
+
+                // Copy the backup file to the remote AWS server
+                sh "scp -o StrictHostKeyChecking=no ${backupFileName} ubuntu@13.232.17.60:${BACKUP_DIR}/${backupFileName}"
+
+                // Optionally, remove the local backup file after copying to the remote server
+                sh "rm ${backupFileName}"
+
+                slackSend color: "good", message: "Build successful: `${env.JOB_NAME}#${env.BUILD_NUMBER}` <${env.BUILD_URL}|Open in Jenkins>\nBackup created and copied to AWS server: ${backupFileName}"
+            }
+        }
+        failure {
+            slackSend color: "danger", message: "Build failed :face_with_head_bandage: \n`${env.JOB_NAME}#${env.BUILD_NUMBER}` <${env.BUILD_URL}|Open in Jenkins>"
+        }
+    }
+
+
+    //aws s3 config
+
+environment {
+        DEPLOY_DIR = '/var/www/yourproject'
+        S3_BUCKET = 'your-s3-bucket-name'  // Replace with your S3 bucket name
+        S3_PATH = 'backups/'  // S3 path where you want to store the backup
+    }
+
+
+post {
+        success {
+            script {
+                // Create a backup of the project directory
+                def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                def backupFileName = "backup_${timestamp}.zip"
+                sh "zip -r ${backupFileName} ${DEPLOY_DIR}"
+
+                // Upload the backup file to the S3 bucket
+                sh "aws s3 cp ${backupFileName} s3://${S3_BUCKET}/${S3_PATH}${backupFileName}"
+
+                // Optionally, remove the local backup file after uploading to S3
+                sh "rm ${backupFileName}"
+
+                slackSend color: "good", message: "Build successful: `${env.JOB_NAME}#${env.BUILD_NUMBER}` <${env.BUILD_URL}|Open in Jenkins>\nBackup created and uploaded to S3: ${backupFileName}"
+            }
+        }
+        failure {
+            slackSend color: "danger", message: "Build failed :face_with_head_bandage: \n`${env.JOB_NAME}#${env.BUILD_NUMBER}` <${env.BUILD_URL}|Open in Jenkins>"
+        }
+    }
+
+
+Configure AWS CLI on Jenkins Server:
+Ensure AWS CLI is installed on your Jenkins server.
+Configure AWS CLI with the credentials of the IAM user created earlier:
+sh
+Copy code
+aws configure
+Enter the AWS Access Key ID, Secret Access Key, default region, and output format when prompted.
+
+
+
+To upload files to an S3 bucket from your Jenkins server, the Jenkins user must have the necessary AWS permissions. This involves configuring AWS Identity and Access Management (IAM) to allow the Jenkins user to perform actions on the S3 bucket. Here's how to do it:
+
+Step-by-Step Guide to Configure AWS Permissions
+Create an IAM User or Role for Jenkins:
+
+If you haven't already, create an IAM user or role that Jenkins will use to interact with AWS.
+Go to the IAM section of the AWS Management Console.
+Click on "Users" if you want to create a user or "Roles" if you want to create a role.
+Attach Policies to the IAM User or Role:
+
+Attach a policy that grants the necessary permissions to the S3 bucket.
+You can use an existing policy like AmazonS3FullAccess or create a custom policy.
+Creating a Custom Policy (if needed):
+
+Navigate to the "Policies" section in the IAM console.
+Click on "Create Policy" and use the following JSON policy as an example:
+json
+Copy code
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::your-s3-bucket-name",
+                "arn:aws:s3:::your-s3-bucket-name/*"
+            ]
+        }
+    ]
+}
+Replace your-s3-bucket-name with the name of your S3 bucket.
+Click "Review Policy", give it a name, and create it.
+Attach this policy to the IAM user or role.
+
+  

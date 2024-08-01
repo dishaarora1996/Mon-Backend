@@ -1,0 +1,47 @@
+# Connect to PostgreSQL
+psql -U postgres -d postgres
+or
+psql -h localhost -p 5432 -U postgres -d postgres
+
+# Inside psql prompt
+# List databases (optional)
+\l
+
+# Switch to a different database if needed (optional)
+\c postgres
+
+# Drop the database
+DROP DATABASE my_database_to_delete;
+
+# Exit psql
+\q
+
+÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷
+
+
+Create new Database
+
+# Connect to PostgreSQL
+psql -U postgres -d postgres
+
+# Inside psql prompt
+# List databases (optional)
+\l
+
+# Create a new database
+CREATE DATABASE my_new_database;
+
+# Verify database creation (optional)
+\l
+
+# Exit psql
+\q
+
+
+GRANT ALL PRIVILEGES ON DATABASE new_database_name TO postgres;
+
+# Connect to PostgreSQL and create the new database (if not done already)
+psql -U postgres -d postgres -c "CREATE DATABASE my_new_database;"
+
+# Import the SQL file into the new database
+psql -U postgres -d my_new_database -f /home/ubuntu/backup.sql

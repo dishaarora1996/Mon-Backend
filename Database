@@ -1,5 +1,5 @@
 # Connect to PostgreSQL
-psql -U postgres -d postgres
+psql -U postgres -d postgres # Do Not use this line
 or
 psql -h localhost -p 5432 -U postgres -d postgres
 

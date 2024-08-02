@@ -52,3 +52,9 @@ Grant permissions:
 - GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE auth_user TO your_db_user;
 - GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_db_user;
 - GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_db_user;
+
+To create agent in jenkins
+
+- Install java in agent
+- Manually craete remote dirstcory like - /opt/jenkins
+- chmod 755 jenkins

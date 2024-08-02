@@ -52,14 +52,14 @@ pipeline {
 
                     // Install Miniconda
                     // Check if Miniconda is already installed
-                    if (!fileExists('/home/ubuntu/miniconda')) {
-                        // Install Miniconda
-                        sh 'wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O Miniconda3-latest-Linux-x86_64.sh'
-                        sh 'bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda'
-                        sh 'export PATH="$HOME/miniconda/bin:$PATH"'
-                    } else {
-                        echo 'Miniconda is already installed. Skipping installation.'
-                    }
+                    // if (!fileExists('/home/ubuntu/miniconda')) {
+                    //     // Install Miniconda
+                    //     sh 'wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O Miniconda3-latest-Linux-x86_64.sh'
+                    //     sh 'bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda'
+                    //     sh 'export PATH="$HOME/miniconda/bin:$PATH"'
+                    // } else {
+                    //     echo 'Miniconda is already installed. Skipping installation.'
+                    // }
 
                     // next steps
                     // Create and activate virtual environment with Python 3

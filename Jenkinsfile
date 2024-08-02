@@ -31,7 +31,7 @@ pipeline {
                         //     sh "git clone https://oauth2:${GIT_TOKEN}@${env.GIT_REPO_URL}"
                         // }
 
-                        sh "git clone https://${env.GIT_REPO_URL}"
+                        sh "git clone ${env.GIT_REPO_URL}"
 
 
                         sh "echo Dependencies installed successfully."

@@ -36,8 +36,10 @@ pipeline {
                         }
                     } else {
                         echo 'Cloning repository...'
-                        sh "git clone ${GIT_REPO_URL}"
+                        sh "mkdir -p Mon-Backend"
                         dir("Mon-Backend") {
+                            sh "git clone ${GIT_REPO_URL}"
+
                             sh "echo current directory pwd"
                             sh "pwd"
                             sh "git checkout ${env.BRANCH}"

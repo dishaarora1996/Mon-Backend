@@ -1,10 +1,8 @@
 #!/usr/bin/bash
 
 # Replace {YOUR_PROJECT_MAIN_DIR_NAME} with your actual project directory name
-PROJECT_MAIN_DIR_NAME="Mon-Backend"
+PROJECT_MAIN_DIR_PATH="/opt/jenkins/workspace/django-app_dev/Mon-Backend/"
 
-# Replace {FOLDER_NAME_WHERE_SETTINGS_FILE_EXISTS} with the folder name where your nginx configuration file exists
-FOLDER_NAME_WHERE_SETTINGS_FILE_EXISTS="bba"
 
 # Reload systemd daemon
 sudo systemctl daemon-reload
@@ -13,10 +11,10 @@ sudo systemctl daemon-reload
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Copy Nginx configuration file
-sudo cp "/home/ubuntu/project/$PROJECT_MAIN_DIR_NAME/nginx/nginx.conf" "/etc/nginx/sites-available/$FOLDER_NAME_WHERE_SETTINGS_FILE_EXISTS"
+sudo cp "$PROJECT_MAIN_DIR_PATH/nginx/nginx.conf" "/etc/nginx/sites-available/bba"
 
 # Create symbolic link to enable Nginx site
-sudo ln -s "/etc/nginx/sites-available/$FOLDER_NAME_WHERE_SETTINGS_FILE_EXISTS" "/etc/nginx/sites-enabled/"
+sudo ln -s "/etc/nginx/sites-available/bba" "/etc/nginx/sites-enabled/"
 
 # Add www-data user to ubuntu group
 sudo gpasswd -a www-data ubuntu

@@ -63,3 +63,23 @@ sudo apt install fontconfig openjdk-17-jre
 sudo mkdir -p /opt/jenkins
 sudo chown ubuntu:ubuntu /opt/jenkins
 sudo chmod 755 /opt/jenkins
+
+
+
+
+To remove gunicorn.service
+
+# Stop the Gunicorn service
+sudo systemctl stop gunicorn.service
+
+# Disable the Gunicorn service
+sudo systemctl disable gunicorn.service
+
+# Remove the Gunicorn service file
+sudo rm /etc/systemd/system/gunicorn.service
+
+# Reload systemd manager configuration
+sudo systemctl daemon-reload
+
+# Verify removal
+sudo systemctl list-units --type=service | grep gunicorn

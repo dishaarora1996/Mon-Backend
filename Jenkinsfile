@@ -24,10 +24,10 @@ pipeline {
                 echo 'Deploying....'
 
                 script {
-                    def repoDir = WORKSPACE_DIR
+
                     sh "echo ${env.WORKSPACE}"
                     echo "Current directory: ${pwd()}"
-                    if (fileExists("${repoDir}/.git")) {
+                    if (fileExists("${env.WORKSPACE}/Mon-Backend/.git")) {
                         echo 'Repository already cloned. Pulling latest changes...'
                         dir(repoDir) {
                             sh 'git reset --hard'  // Discard any local changes
@@ -36,8 +36,8 @@ pipeline {
                         }
                     } else {
                         echo 'Cloning repository...'
-                        sh "mkdir -p ${repoDir}" // Ensure the directory exists
-                        sh "git clone ${REPO_URL} ${repoDir}"
+                        sh "mkdir -p ${env.WORKSPACE}/Mon-Backend" // Ensure the directory exists
+                        sh "git clone ${REPO_URL} ${env.WORKSPACE}/Mon-Backend"
                         dir(repoDir) {
                             sh "git checkout ${BRANCH}"
                         }

@@ -24,9 +24,9 @@ pipeline {
                 script {
 
                     echo "Current directory: ${pwd()}"
-                    if (fileExists('TazosMon-Backend')) {
+                    if (fileExists('Mon-Backend')) {
                         sh "echo pull...."
-                        dir('TazosMon-Backend') {
+                        dir('Mon-Backend') {
                             sh "git pull origin dev"
                         }
                     } else {
@@ -50,12 +50,12 @@ pipeline {
                     sh "git branch -a"
 
                     // Checkout to a specific branch in your repo
-                    dir('TazosMon-Backend') {
+                    dir('Mon-Backend') {
                         sh "git checkout dev"
                     }
 
 
-                    dir('TazosMon-Backend') {
+                    dir('Mon-Backend') {
                         sh "echo good!"
                         //sh 'python manage.py runserver 0.0.0.0:8000'
                     }

@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # Replace {YOUR_PROJECT_MAIN_DIR_NAME} with your actual project directory name
-PROJECT_MAIN_DIR_PATH="/opt/jenkins/workspace/django-app_dev/Mon-Backend/"
+PROJECT_MAIN_DIR_PATH="/home/ubuntu/opt/jenkins/workspace/django-app_dev/Mon-Backend/"
 
 
 # Reload systemd daemon

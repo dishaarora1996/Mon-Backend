@@ -43,7 +43,7 @@ pipeline {
                             sh "./scripts/instance_os_dependencies.sh"
                             sh "./scripts/python_dependencies.sh"
                             sh "./scripts/install_database.sh"
-                            sh "python manage.py runserver 0.0.0.0:8000"
+                            sh "./scripts/gunicorn.sh"
                         }
                     }
                     // List all files to ensure they are cloned or updated

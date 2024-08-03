@@ -56,5 +56,10 @@ Grant permissions:
 To create agent in jenkins
 
 - Install java in agent
+sudo apt update
+sudo apt install fontconfig openjdk-17-jre
+
 - Manually craete remote dirstcory like - /opt/jenkins
-- chmod 755 jenkins
+sudo mkdir -p /opt/jenkins
+sudo chown ubuntu:ubuntu /opt/jenkins
+sudo chmod 755 /opt/jenkins

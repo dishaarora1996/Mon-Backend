@@ -36,16 +36,13 @@ pipeline {
                         }
                     } else {
                         echo 'Cloning repository...'
-                        sh "mkdir -p Mon-Backend"
+                        sh "git clone ${GIT_REPO_URL}"
                         dir("Mon-Backend") {
-                            sh "git clone ${GIT_REPO_URL}"
-
-                            sh "echo current directory pwd"
-                            sh "pwd"
                             sh "git checkout ${env.BRANCH}"
                             sh "chmod +x scripts/*.sh"
                             sh "./scripts/instance_os_dependencies.sh"
                             sh "./scripts/python_dependencies.sh"
+                            sh "./scripts/install_database.sh"
                         }
                     }
                     // List all files to ensure they are cloned or updated

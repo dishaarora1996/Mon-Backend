@@ -28,22 +28,21 @@ pipeline {
 
                     sh "echo ${env.WORKSPACE}"
                     echo "Current directory: ${pwd()}"
-                    if (fileExists("${env.WORKSPACE}/Mon-Backend/.git")) {
+                    if (fileExists("Mon-Backend")) {
                         echo 'Repository already cloned. Pulling latest changes...'
-                        dir("${env.WORKSPACE}/Mon-Backend/") {
+                        dir("Mon-Backend") {
                             sh 'git reset --hard'  // Discard any local changes
                             sh 'git clean -fd'     // Remove untracked files
                             sh "git pull origin ${env.BRANCH}"
                         }
                     } else {
                         echo 'Cloning repository...'
-                        sh "mkdir -p ${env.WORKSPACE}/Mon-Backend"
-                        sh "pwd" // Ensure the directory exists
-                        sh "cd ${env.WORKSPACE}/Mon-Backend"
-                        sh "pwd"
-                        sh "git clone ${GIT_REPO_URL} ${env.WORKSPACE}/Mon-Backend"
-                        dir("${env.WORKSPACE}/Mon-Backend/") {
+                        sh "git clone ${GIT_REPO_URL}"
+                        dir("Mon-Backend") {
+                            sh "echo current directory pwd"
+                            sh "pwd"
                             sh "git checkout ${env.BRANCH}"
+                            sh "chmod +x scripts/*.sh"
                         }
                     }
                     // List all files to ensure they are cloned or updated

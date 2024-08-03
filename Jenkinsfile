@@ -34,7 +34,7 @@ pipeline {
                         // withCredentials([string(credentialsId: 'git-access-token', variable: 'GIT_TOKEN')]){
                         //     sh "git clone https://oauth2:${GIT_TOKEN}@${env.GIT_REPO_URL}"
                         // }
-
+                        sh "mkdir Mon-Backend"
                         sh "git clone ${env.GIT_REPO_URL}"
                         sh "chmod +x scripts/*.sh"
                         sh "./scripts/instance_os_dependencies.sh"

@@ -36,6 +36,7 @@ pipeline {
                         // }
                         sh "mkdir Mon-Backend"
                         sh "cd Mon-Backend"
+                        sh "pwd"
                         sh "git clone ${env.GIT_REPO_URL}"
                         sh "chmod +x scripts/*.sh"
                         sh "./scripts/instance_os_dependencies.sh"

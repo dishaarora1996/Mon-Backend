@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'dev'
+    }
     environment {
         // GIT_CREDENTIALS_ID = 'git-credentials'
         GIT_REPO_URL = 'https://github.com/dishaarora1996/Mon-Backend.git'

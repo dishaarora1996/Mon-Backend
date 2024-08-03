@@ -20,6 +20,8 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 script {
+
+                    echo "Current directory: ${pwd()}"
                     if (fileExists('TazosMon-Backend')) {
                         sh "echo pull...."
                         dir('TazosMon-Backend') {

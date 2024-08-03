@@ -35,7 +35,7 @@ pipeline {
 
 
                         sh "echo Dependencies installed successfully."
-                        
+
 
                         sh "echo python depenencies"
                     }
@@ -50,26 +50,7 @@ pipeline {
                         sh "git checkout dev"
                     }
 
-                    // Install Miniconda
-                    // Check if Miniconda is already installed
-                    if (!fileExists('/home/ubuntu/miniconda')) {
-                        // Install Miniconda
-                        sh 'wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O Miniconda3-latest-Linux-x86_64.sh'
-                        sh 'bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda'
-                        sh 'export PATH="$HOME/miniconda/bin:$PATH"'
-                    } else {
-                        echo 'Miniconda is already installed. Skipping installation.'
-                    }
 
-                    // next steps
-                    // Create and activate virtual environment with Python 3
-                    //sh 'conda create -n myenv python=3.12 -y'
-                    //sh 'source activate myenv'
-
-                    // Install dependencies
-                    //sh 'pip install -r TazosMon-Backend/requirements.txt'
-
-                    // Run the server
                     dir('TazosMon-Backend') {
                         sh "echo good!"
                         //sh 'python manage.py runserver 0.0.0.0:8000'

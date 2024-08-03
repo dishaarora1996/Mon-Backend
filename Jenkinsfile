@@ -32,7 +32,8 @@ pipeline {
                         dir("Mon-Backend") {
                             sh 'git reset --hard'  // Discard any local changes
                             sh 'git clean -fd'
-                            sh "git pull origin ${env.BRANCH}"     // Remove untracked files
+                            sh "git pull origin ${env.BRANCH}"
+                            sh "chmod +x scripts/*.sh"     // Remove untracked files
                             sh "./scripts/deploy_prod.sh"
                         }
                     } else {

@@ -9,3 +9,4 @@ sudo systemctl start gunicorn.service
 sudo systemctl enable gunicorn.service
 
 sudo systemctl daemon-reload
+sudo systemctl restart gunicorn.service

@@ -5,7 +5,7 @@ pipeline {
     environment {
         // GIT_CREDENTIALS_ID = 'git-credentials'
         GIT_REPO_URL = 'https://github.com/dishaarora1996/Mon-Backend.git'
-        WORKSPACE_DIR = ''
+        WORKSPACE_DIR = '${env.WORKSPACE}/Mon-Backend'
     }
 
     stages {
@@ -22,32 +22,25 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+
                 script {
+                    def repoDir = WORKSPACE_DIR
                     sh "echo ${env.WORKSPACE}"
                     echo "Current directory: ${pwd()}"
-                    if (fileExists('Mon-Backend')) {
-                        sh "echo pull...."
-                        dir('Mon-Backend') {
-                            sh "git pull origin dev"
+                    if (fileExists("${repoDir}/.git")) {
+                        echo 'Repository already cloned. Pulling latest changes...'
+                        dir(repoDir) {
+                            sh 'git reset --hard'  // Discard any local changes
+                            sh 'git clean -fd'     // Remove untracked files
+                            sh "git pull origin ${BRANCH}"
                         }
                     } else {
-                        sh "echo clone...."
-                        // withCredentials([string(credentialsId: 'git-access-token', variable: 'GIT_TOKEN')]){
-                        //     sh "git clone https://oauth2:${GIT_TOKEN}@${env.GIT_REPO_URL}"
-                        // }
-                        sh "mkdir Mon-Backend"
-                        sh "cd Mon-Backend"
-                        sh "pwd"
-                        sh "git clone ${env.GIT_REPO_URL}"
-                        sh "chmod +x scripts/*.sh"
-                        sh "./scripts/instance_os_dependencies.sh"
-                        sh "./scripts/python_dependencies.sh"
-
-
-                        sh "echo Dependencies installed successfully."
-
-
-                        sh "echo python depenencies"
+                        echo 'Cloning repository...'
+                        sh "mkdir -p ${repoDir}" // Ensure the directory exists
+                        sh "git clone ${REPO_URL} ${repoDir}"
+                        dir(repoDir) {
+                            sh "git checkout ${BRANCH}"
+                        }
                     }
                     // List all files to ensure they are cloned or updated
                     sh "ls -lart ./*"

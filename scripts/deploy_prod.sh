@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Pull latest changes
-git pull origin main
-
 # Activate virtual environment
 source venv/bin/activate
 

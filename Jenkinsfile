@@ -31,7 +31,8 @@ pipeline {
                         echo 'Repository already cloned. Pulling latest changes...'
                         dir("Mon-Backend") {
                             sh 'git reset --hard'  // Discard any local changes
-                            sh 'git clean -fd'     // Remove untracked files
+                            sh 'git clean -fd'
+                            sh "git pull origin ${env.BRANCH}"     // Remove untracked files
                             sh "./scripts/deploy_prod.sh"
                         }
                     } else {

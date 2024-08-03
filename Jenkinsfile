@@ -6,6 +6,7 @@ pipeline {
         // GIT_CREDENTIALS_ID = 'git-credentials'
         GIT_REPO_URL = 'https://github.com/dishaarora1996/Mon-Backend.git'
         WORKSPACE_DIR = '${env.WORKSPACE}/Mon-Backend'
+        BRANCH = 'dev'
     }
 
     stages {
@@ -32,14 +33,14 @@ pipeline {
                         dir("${env.WORKSPACE}/Mon-Backend/") {
                             sh 'git reset --hard'  // Discard any local changes
                             sh 'git clean -fd'     // Remove untracked files
-                            sh "git pull origin ${BRANCH}"
+                            sh "git pull origin ${env.BRANCH}"
                         }
                     } else {
                         echo 'Cloning repository...'
                         sh "mkdir -p ${env.WORKSPACE}/Mon-Backend" // Ensure the directory exists
                         sh "git clone ${GIT_REPO_URL} ${env.WORKSPACE}/Mon-Backend"
                         dir("${env.WORKSPACE}/Mon-Backend/") {
-                            sh "git checkout ${BRANCH}"
+                            sh "git checkout ${env.BRANCH}"
                         }
                     }
                     // List all files to ensure they are cloned or updated

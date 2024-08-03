@@ -6,9 +6,9 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-EnvironmentFile=/home/ubuntu/project/Mon-Backend/.env
-WorkingDirectory=/home/ubuntu/project/Mon-Backend
-ExecStart=/home/ubuntu/project/venv/bin/gunicorn \
+EnvironmentFile=/opt/jenkins/workspace/django-app_dev/Mon-Backend/.env
+WorkingDirectory=/opt/jenkins/workspace/django-app_dev/Mon-Backend
+ExecStart=/opt/jenkins/workspace/django-app_dev/Mon-Backend/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \

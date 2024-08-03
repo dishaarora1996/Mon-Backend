@@ -45,6 +45,7 @@ pipeline {
                             sh "./scripts/install_database.sh"
                             sh "./scripts/gunicorn.sh"
                             sh "./scripts/nginx.sh"
+                            sh "./scripts/start_app.sh"
                         }
                     }
                     // List all files to ensure they are cloned or updated

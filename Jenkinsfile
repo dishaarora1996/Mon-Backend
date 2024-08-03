@@ -37,7 +37,10 @@ pipeline {
                         }
                     } else {
                         echo 'Cloning repository...'
-                        sh "mkdir -p ${env.WORKSPACE}/Mon-Backend" // Ensure the directory exists
+                        sh "mkdir -p ${env.WORKSPACE}/Mon-Backend"
+                        sh "pwd" // Ensure the directory exists
+                        sh "cd ${env.WORKSPACE}/Mon-Backend"
+                        sh "pwd"
                         sh "git clone ${GIT_REPO_URL} ${env.WORKSPACE}/Mon-Backend"
                         dir("${env.WORKSPACE}/Mon-Backend/") {
                             sh "git checkout ${env.BRANCH}"

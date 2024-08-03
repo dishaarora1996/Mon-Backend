@@ -29,7 +29,7 @@ pipeline {
                     echo "Current directory: ${pwd()}"
                     if (fileExists("${env.WORKSPACE}/Mon-Backend/.git")) {
                         echo 'Repository already cloned. Pulling latest changes...'
-                        dir(repoDir) {
+                        dir("${env.WORKSPACE}/Mon-Backend/") {
                             sh 'git reset --hard'  // Discard any local changes
                             sh 'git clean -fd'     // Remove untracked files
                             sh "git pull origin ${BRANCH}"
@@ -38,7 +38,7 @@ pipeline {
                         echo 'Cloning repository...'
                         sh "mkdir -p ${env.WORKSPACE}/Mon-Backend" // Ensure the directory exists
                         sh "git clone ${GIT_REPO_URL} ${env.WORKSPACE}/Mon-Backend"
-                        dir(repoDir) {
+                        dir("${env.WORKSPACE}/Mon-Backend/") {
                             sh "git checkout ${BRANCH}"
                         }
                     }

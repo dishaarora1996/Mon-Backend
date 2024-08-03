@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# Navigate to the project directory
-cd /home/ubuntu/project/Mon-Backend
-
 # Pull latest changes
 git pull origin main
 
 # Activate virtual environment
-source ../venv/bin/activate
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt

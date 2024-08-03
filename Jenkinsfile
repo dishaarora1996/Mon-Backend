@@ -32,7 +32,7 @@ pipeline {
                         dir("Mon-Backend") {
                             sh 'git reset --hard'  // Discard any local changes
                             sh 'git clean -fd'     // Remove untracked files
-                            sh "git pull origin ${env.BRANCH}"
+                            sh "./scripts/deploy_prod.sh"
                         }
                     } else {
                         echo 'Cloning repository...'

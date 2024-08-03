@@ -37,7 +37,7 @@ pipeline {
 
                         sh "git clone ${env.GIT_REPO_URL}"
                         sh "chmod +x scripts/*.sh"
-                        sh ""
+                        sh "./scripts/instance_os_dependencies.sh"
 
 
                         sh "echo Dependencies installed successfully."

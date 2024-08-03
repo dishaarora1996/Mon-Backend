@@ -5,7 +5,6 @@ pipeline {
     environment {
         // GIT_CREDENTIALS_ID = 'git-credentials'
         GIT_REPO_URL = 'https://github.com/dishaarora1996/Mon-Backend.git'
-        WORKSPACE_DIR = '${env.WORKSPACE}/Mon-Backend'
         BRANCH = 'dev'
     }
 
@@ -43,6 +42,8 @@ pipeline {
                             sh "pwd"
                             sh "git checkout ${env.BRANCH}"
                             sh "chmod +x scripts/*.sh"
+                            sh "./scripts/instance_os_dependencies.sh"
+                            sh "./scripts/python_dependencies.sh"
                         }
                     }
                     // List all files to ensure they are cloned or updated

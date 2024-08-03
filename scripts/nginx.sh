@@ -10,6 +10,14 @@ sudo systemctl daemon-reload
 # Remove default Nginx site if exists
 sudo rm -f /etc/nginx/sites-enabled/default
 
+# Check if the symbolic link exists
+if [ -L /etc/nginx/sites-enabled/bba ]; then
+    echo "Symbolic link /etc/nginx/sites-enabled/bba exists. Removing it."
+    sudo rm /etc/nginx/sites-enabled/bba
+else
+    echo "Symbolic link /etc/nginx/sites-enabled/bba does not exist."
+fi
+
 # Copy Nginx configuration file
 sudo cp "$PROJECT_MAIN_DIR_PATH/nginx/nginx.conf" "/etc/nginx/sites-available/bba"
 

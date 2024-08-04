@@ -48,3 +48,7 @@ psql -U postgres -d postgres -c "CREATE DATABASE my_new_database;"
 
 # Import the SQL file into the new database
 psql -U postgres -d my_new_database -f /home/ubuntu/backup.sql
+
+
+# Restore database from command line 
+pg_restore --host "13.200.242.236" --port "5432" --username "postgres" --dbname "bba-admin-database" --verbose "/Users/omkar/Downloads/bba_backup.sql"

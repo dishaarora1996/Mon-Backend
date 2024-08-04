@@ -80,6 +80,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 		        'bba_admin.context_processors.image_url',
+		        'bba_admin.context_processors.media_url',
                 'bba_admin.context_processors.menu_permission',
             ],
         },

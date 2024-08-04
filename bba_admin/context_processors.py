@@ -6,6 +6,10 @@ def image_url(request):
     # return the value you want as a dictionnary. you may add multiple values in there.
     return {'IMAGE_MEDIA_PATH': settings.IMAGE_MEDIA_PATH}
 
+def media_url(request):
+    # return the value you want as a dictionnary. you may add multiple values in there.
+    return {'MEDIA_PATH': settings.MEDIA_URL}
+
 def user_profile_image(request):
     if request.user.is_authenticated:
         user = request.user
@@ -15,12 +19,12 @@ def user_profile_image(request):
 
 
 def menu_permission(request):
-    
+
     if request.user.is_authenticated:
         user = request.user
         emp_obj = Employee.objects.filter(user=user).first()
         admin_menu_permission = AdminMenuPermission.objects.filter(role_id=emp_obj.role_id) if emp_obj else []
-        
+
         menu_permission_list = []
         # for admin_menu in admin_menu_permission:
         #     print(f"****************{AdminMenu.objects.filter(admin_menu_id=admin_menu.admin_menu_id.admin_menu_id)}")
@@ -31,13 +35,13 @@ def menu_permission(request):
         #     menu_set['child_menu'] = menu_obj
         #     menu_permission_list.append(menu_set)
         all_menus = AdminMenu.objects.filter(parent_id__isnull=True).order_by("admin_menu_id")
-        
+
         # import pdb;pdb.set_trace()
         for menu in all_menus:
             menu_set = {}
-            
+
             child_menu = AdminMenu.objects.filter(parent_id=menu.admin_menu_id).order_by('admin_menu_id')
-            
+
             temp = []
             for child in child_menu:
                 child_temp = {}
@@ -50,7 +54,7 @@ def menu_permission(request):
             if temp:
                 menu_set["child_menu"] = temp
                 menu_permission_list.append(menu_set)
-            
-        
+
+
         return {"admin_menu_permission": menu_permission_list}
     return {"admin": ""}

@@ -1,4 +1,7 @@
 # Connect to PostgreSQL
+
+sudo -i -u postgres psql
+or
 psql -U postgres -d postgres # Do Not use this line
 or
 psql -h localhost -p 5432 -U postgres -d postgres

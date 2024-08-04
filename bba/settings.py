@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'bba_admin',
     'rest_framework',
+    'storages',
     'knox', # pip install django-rest-knox
     # 'rest_framework.authtoken',
 ]
@@ -178,7 +179,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR/'media'
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
@@ -289,10 +290,11 @@ REST_KNOX = {
 AWS_ACCESS_KEY_ID = 'AKIAW3MECJ5LWRWXDRPL'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'bba-bucket-storage'
-AWS_S3_SIGNATURE_NAME = 's3v4',
+# AWS_S3_SIGNATURE_NAME = 's3v4',
 AWS_S3_REGION_NAME = 'ap-south-1'
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL =  None
-AWS_S3_VERITY = True
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
+
+# Media Settings
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'

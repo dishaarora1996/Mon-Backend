@@ -6,6 +6,8 @@ pipeline {
         // GIT_CREDENTIALS_ID = 'git-credentials'
         GIT_REPO_URL = 'https://github.com/dishaarora1996/Mon-Backend.git'
         BRANCH = 'dev'
+        S3_BUCKET = 'bba-bucket-list'
+        S3_BACKUP_PATH = 'backups/django_project/'
     }
 
     stages {
@@ -83,10 +85,10 @@ pipeline {
         success {
             script {
                 // Publish artifacts to S3 on successful build
-                def s3Profile = 'your-aws-credentials-id'
+                def s3Profile = 'S3-Artifact-Demo'
                 def filePath = 'django_project_backup.tar.gz'
-                def bucket = S3_BUCKET
-                def destPath = "${S3_BACKUP_PATH}${env.BRANCH_NAME}/"
+                def bucket = "${env.S3_BUCKET}"
+                def destPath = "${env.S3_BACKUP_PATH}${env.BRANCH}/"
 
                 s3Upload consoleLogLevel: 'INFO',
                          dontSetBuildResultOnFailure: false,

@@ -71,33 +71,41 @@ pipeline {
                 }
             }
         }
+        // stage('Build Artifacts') {
+        //     steps {
+        //         // Remove the old tarball if it exists
+        //         sh 'rm -f django_project_backup.tar.gz'
+        
+        //         // Tar the entire project directory, excluding the previous tarball
+        //         sh 'tar --exclude=django_project_backup.tar.gz -czvf django_project_backup.tar.gz *'
+        //     }
+        // }
         stage('Build Artifacts') {
             steps {
-                // Remove the old tarball if it exists
-                sh 'rm -f django_project_backup.tar.gz'
-        
-                // Tar the entire project directory, excluding the previous tarball
-                sh 'tar --exclude=django_project_backup.tar.gz -czvf django_project_backup.tar.gz *'
+                // Include build number in the artifact name
+                def artifactName = "django_project_backup_${env.BUILD_NUMBER}.tar.gz"
+                sh "tar --exclude=${artifactName} -czvf ${artifactName} *"
             }
         }
+
     }
     post {
         success {
             script {
                 // Publish artifacts to S3 on successful build
                 def s3Profile = 'S3-Artifact-Demo'
-                def filePath = 'django_project_backup.tar.gz'
+                def artifactName = "django_project_backup_${env.BUILD_NUMBER}.tar.gz"
                 def bucket = "${env.S3_BUCKET}"
                 def destPath = "${env.S3_BACKUP_PATH}${env.BRANCH}/"
 
                 s3Upload consoleLogLevel: 'INFO',
                          dontSetBuildResultOnFailure: false,
-                         entries: [[bucket: bucket, sourceFile: filePath, storageClass: 'STANDARD', selectedRegion: 'ap-south-1', uploadFromSlave: true, path: destPath]],
+                         entries: [[bucket: bucket, sourceFile: artifactName, storageClass: 'STANDARD', selectedRegion: 'ap-south-1', uploadFromSlave: true, path: destPath]],
                          profileName: s3Profile
             }
-
-            // Optionally, archive the artifact in Jenkins
-            archiveArtifacts artifacts: 'django_project_backup.tar.gz', allowEmptyArchive: true
+            
+        // Archive the uniquely named artifact in Jenkins
+        archiveArtifacts artifacts: "django_project_backup_${env.BUILD_NUMBER}.tar.gz", allowEmptyArchive: true
         }
     }
 }

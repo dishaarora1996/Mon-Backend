@@ -71,6 +71,9 @@ pipeline {
         }
         stage('Build Artifacts') {
             steps {
+                // Remove the old tarball if it exists
+                sh 'rm -f django_project_backup.tar.gz'
+        
                 // Tar the entire project directory, excluding the previous tarball
                 sh 'tar --exclude=django_project_backup.tar.gz -czvf django_project_backup.tar.gz *'
             }

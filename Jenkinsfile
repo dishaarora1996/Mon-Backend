@@ -69,5 +69,11 @@ pipeline {
                 }
             }
         }
+        stage('Build Artifacts') {
+            steps {
+                // Tar the entire project directory
+                sh 'tar -czvf django_project_backup.tar.gz *'
+            }
+        }
     }
 }

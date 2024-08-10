@@ -79,4 +79,10 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            // Clean up the workspace after every build
+            cleanWs()
+        }
+    }
 }

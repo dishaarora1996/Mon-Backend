@@ -3,6 +3,7 @@ set -e
 
 # Run collectstatic command
 echo "Running collectstatic command..."
+pwd
 python3 manage.py collectstatic --noinput
 
 # Restart Gunicorn and Nginx services

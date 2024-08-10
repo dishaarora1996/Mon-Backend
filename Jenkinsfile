@@ -82,9 +82,12 @@ pipeline {
         // }
         stage('Build Artifacts') {
             steps {
-                // Include build number in the artifact name
-                def artifactName = "django_project_backup_${env.BUILD_NUMBER}.tar.gz"
-                sh "tar --exclude=${artifactName} -czvf ${artifactName} *"
+                script {
+                    // Define the artifact name with build number
+                    def artifactName = "django_project_backup_${env.BUILD_NUMBER}.tar.gz"
+                    // Create the tarball excluding the previously created tarball
+                    sh "tar --exclude=${artifactName} -czvf ${artifactName} *"
+                }
             }
         }
 

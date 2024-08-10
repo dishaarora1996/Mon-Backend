@@ -71,8 +71,8 @@ pipeline {
         }
         stage('Build Artifacts') {
             steps {
-                // Tar the entire project directory
-                sh 'tar -czvf django_project_backup.tar.gz *'
+                // Tar the entire project directory, excluding the previous tarball
+                sh 'tar --exclude=django_project_backup.tar.gz -czvf django_project_backup.tar.gz *'
             }
         }
     }

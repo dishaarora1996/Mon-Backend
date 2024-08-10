@@ -80,8 +80,26 @@ pipeline {
         }
     }
     post {
+        success {
+            script {
+                // Publish artifacts to S3 on successful build
+                def s3Profile = 'your-aws-credentials-id'
+                def filePath = 'django_project_backup.tar.gz'
+                def bucket = S3_BUCKET
+                def destPath = "${S3_BACKUP_PATH}${env.BRANCH_NAME}/"
+
+                s3Upload consoleLogLevel: 'INFO',
+                         dontSetBuildResultOnFailure: false,
+                         entries: [[bucket: bucket, sourceFile: filePath, storageClass: 'STANDARD', selectedRegion: 'ap-south-1', uploadFromSlave: true, path: destPath]],
+                         profileName: s3Profile
+            }
+
+            // Optionally, archive the artifact in Jenkins
+            archiveArtifacts artifacts: 'django_project_backup.tar.gz', allowEmptyArchive: true
+        }
+
         always {
-            // Clean up the workspace after every build
+            // Clean up the workspace if needed
             cleanWs()
         }
     }

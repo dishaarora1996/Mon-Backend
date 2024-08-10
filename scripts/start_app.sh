@@ -4,7 +4,7 @@ set -e
 # Run collectstatic command
 echo "Running collectstatic command..."
 source venv/bin/activate
-python3 manage.py collectstatic --noinput
+python manage.py collectstatic --noinput
 
 # Restart Gunicorn and Nginx services
 echo "Restarting Gunicorn and Nginx services..."

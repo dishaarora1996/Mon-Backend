@@ -99,10 +99,5 @@ pipeline {
             // Optionally, archive the artifact in Jenkins
             archiveArtifacts artifacts: 'django_project_backup.tar.gz', allowEmptyArchive: true
         }
-
-        always {
-            // Clean up the workspace if needed
-            cleanWs()
-        }
     }
 }

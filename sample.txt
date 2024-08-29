@@ -1,0 +1,16 @@
+class CommonFilterListSerializer(serializers.ListSerializer):
+    """
+    ListSerializer
+    cmobject: is_deleted=False
+    """
+    def to_representation(self, data):
+        # if isinstance(data, Page):
+        #     data.object_list = data.object_list.filter(is_deleted=False)
+        if hasattr(data, 'object_list'):
+            # print("check with object list")
+            data.object_list = [item for item in data.object_list if not item.is_deleted]
+        else:
+            # print("check without pagination")
+            data = data.filter(is_deleted=False)
+        
+        return super().to_representation(data)

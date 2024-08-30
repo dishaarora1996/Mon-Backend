@@ -1,0 +1,30 @@
+
+def custom_filters(request, search: dict, extras: list):
+
+    print(Back.CYAN,"*"*100)
+    exclude = {}
+    print("search -> ",search)
+    print("exclude -> ",exclude)
+    print('extras ->', extras)
+    valid_filters = ['id', 'all', 'page_size', 'page', 'order_by', 'hideLoader', 'order']
+    valid_filters = valid_filters+extras
+    print("valid_filters -> ",valid_filters)
+    for filter_name, filter_value in request.query_params.items():
+        if filter_name not in valid_filters and filter_value:
+            temp_val = filter_value
+            if temp_val == 'true':
+                temp_val = True
+            if temp_val == 'false':
+                temp_val = False
+            if filter_name.endswith('__in'):
+                temp_val = filter_value.split(',')
+            if filter_name.startswith('exclude__'):
+                exclude[f'{filter_name.replace("exclude__", "")}'] = temp_val
+            else:
+                search[f'{filter_name}'] = temp_val
+    print("query_params -> ",request.query_params)
+    print("search -> ",search)
+    print("exclude -> ",exclude)
+    print("*"*100,Style.RESET_ALL)
+    return search,exclude
+

@@ -28,3 +28,43 @@ def custom_filters(request, search: dict, extras: list):
     print("*"*100,Style.RESET_ALL)
     return search,exclude
 
+#########################################################################################
+class MaterialGstEntryAPIView(APIView):
+    """
+    CRUD API for Brand model
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """
+        Get a list
+        """
+        id = self.request.query_params.get('id', None)
+        all = self.request.query_params.get('all', None)
+        order_by = self.request.query_params.get('order_by', '-id')
+        if id:
+            detail = MaterialGstEntry.cmobjects.select_related('organization', 'material', 'tax').filter(id=id).first()
+            serializer = MaterialGstEntrySerializer(detail)
+            return Response(serializer.data)
+
+        search, exclude = custom_filters(self.request, {}, [])
+        details = MaterialGstEntry.cmobjects.filter(**search).exclude(**exclude).order_by(str(order_by))
+        if all == 'true':
+            serializer = MaterialGstEntrySerializer(details, many=True)
+            return Response({'results': serializer.data})
+        page_size = int(request.query_params.get('page_size', 20))
+        paginator = Paginator(details, page_size)
+        page_number = self.request.query_params.get('page', 1)
+        page = paginator.get_page(page_number)
+        serializer = MaterialGstEntrySerializer(page, many=True)
+
+        return Response({
+            'count': paginator.count,
+            'next': page.next_page_number() if page.has_next() else None,
+            'previous': page.previous_page_number() if page.has_previous() else None,
+            'results': serializer.data,
+        })
+
+
+

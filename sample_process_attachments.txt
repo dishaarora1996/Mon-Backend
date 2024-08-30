@@ -1,0 +1,22 @@
+
+def process_attachments(file_data):
+    mime_type = file_data.get('mime_type', '')
+    file_content = file_data.get('file_data', '')
+    try:
+        attachment_content = base64.b64decode(file_content)
+        file_name = f"{uuid.uuid4().hex}"
+        mime_type_obj = MimeTypes.objects.filter(mime_type=mime_type).first()
+        if not mime_type_obj:
+            file_extension = mimetypes.guess_extension(mime_type)
+        else:
+            file_extension=mime_type_obj.file_extension
+        file_extension = file_extension if file_extension else '.bin'
+        file_name_with_extension = f"{file_name}{file_extension}"
+        return ContentFile(attachment_content, name=file_name_with_extension)
+    except Exception as e:
+        print(Back.MAGENTA, f"Exception while adding new attachments: {str(e)}", Style.RESET_ALL)
+    return None
+
+
+
+

@@ -1,0 +1,127 @@
+def update(self, instance, validated_data):
+        for field in instance._meta.fields:
+            field_name = field.name
+            if field_name in validated_data:
+                setattr(instance, field_name, validated_data[field_name])
+        instance.save()
+        current_user = instance.updated_by if instance.updated_by else None
+
+        quotation_item_data = validated_data.get('procurement_rfq_quotation_item', [])
+        quotation_tax_data = validated_data.get('procurement_quotation_tax', [])
+        quotation_expense_data = validated_data.get('procurement_quotation_expense', [])
+        quotation_tnc_data = validated_data.get('procurement_rfq_quotation_terms_and_conditions', [])
+        attachments_data = validated_data.get('procurement_quotation_attachment', [])
+
+        existing_attachments = instance.procurement_quotation_attachment.filter(is_deleted=False)
+        for attachment_data in attachments_data:
+            attachment_id = attachment_data.get('id')
+            temp_attach_data = process_attachments(attachment_data)
+            existing_attachment = next((attachment for attachment in existing_attachments if attachment.id == attachment_id), None)
+            if not existing_attachment:
+                try:
+                    existing_attachment = QuotationAttachments.objects.create(
+                        organization=instance.organization,
+                        quotation=instance,
+                        attachment=temp_attach_data,
+                        file_data="",
+                        mime_type="",
+                        created_by=current_user
+                    )
+                except Exception as e:
+                    print(f"exception: {e}")
+            else:
+                setattr(existing_attachment, 'attachment', temp_attach_data)
+                setattr(existing_attachment, 'updated_by', current_user)
+                existing_attachment.save()
+
+        existing_items = instance.procurement_rfq_quotation_item.filter(is_deleted=False)
+        existing_taxes = instance.procurement_quotation_tax.filter(is_deleted=False)
+        existing_expense = instance.procurement_quotation_expense.filter(is_deleted=False)
+        existing_tncs = instance.procurement_rfq_quotation_terms_and_conditions.filter(is_deleted=False)
+
+        for item_data in quotation_tnc_data:
+            item_id = item_data.get('id')
+            item_data['created_by'] = current_user
+            existing_item = next((item for item in existing_tncs if item.id == item_id), None)
+
+            if not existing_item:
+                existing_item = QuotationTermsAndConditions.objects.create(quotation=instance, created_by=current_user, **item_data)
+            else:
+                for field in existing_item._meta.fields:
+                    field_name = field.name
+                    if field_name in item_data:
+                        setattr(existing_item, field_name, item_data[field_name])
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+
+        for existing_item in existing_tncs:
+            if existing_item.id not in [item_data.get('id') for item_data in quotation_tnc_data]:
+                setattr(existing_item, 'is_deleted', True)
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+
+        for item_data in quotation_item_data:
+            item_id = item_data.get('id')
+            existing_item = next((item for item in existing_items if item.id == item_id), None)
+
+            if not existing_item:
+                existing_item = QuotationItems.objects.create(quotation=instance, created_by=current_user, **item_data)
+            else:
+                for field in existing_item._meta.fields:
+                    field_name = field.name
+                    if field_name in item_data:
+                        setattr(existing_item, field_name, item_data[field_name])
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+
+        for existing_item in existing_items:
+            if existing_item.id not in [item_data.get('id') for item_data in quotation_item_data]:
+                setattr(existing_item, 'is_deleted', True)
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+        self.calculate_totals(instance)
+        
+        for item_data in quotation_expense_data:
+            item_id = item_data.get('id')
+            existing_item = next((item for item in existing_expense if item.id == item_id), None)
+
+            if not existing_item:
+                existing_item = QuotationExpenseDetails.objects.create(quotation=instance, created_by=current_user, **item_data)
+            else:
+                for field in existing_item._meta.fields:
+                    field_name = field.name
+                    if field_name in item_data:
+                        setattr(existing_item, field_name, item_data[field_name])
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+
+        for existing_item in existing_expense:
+            if existing_item.id not in [item_data.get('id') for item_data in quotation_expense_data]:
+                setattr(existing_item, 'is_deleted', True)
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+        self.calculate_totals(instance)
+        
+        for item_data in quotation_tax_data:
+            item_id = item_data.get('id')
+            existing_item = next((item for item in existing_taxes if item.id == item_id), None)
+
+            if not existing_item:
+                existing_item = QuotationTaxDetails.objects.create(quotation=instance, created_by=current_user, **item_data)
+            else:
+                for field in existing_item._meta.fields:
+                    field_name = field.name
+                    if field_name in item_data:
+                        setattr(existing_item, field_name, item_data[field_name])
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+
+        for existing_item in existing_taxes:
+            if existing_item.id not in [item_data.get('id') for item_data in quotation_tax_data]:
+                setattr(existing_item, 'is_deleted', True)
+                setattr(existing_item, 'updated_by', current_user)
+                existing_item.save()
+
+        self.calculate_totals(instance)
+        instance.save()
+        return instance
